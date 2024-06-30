@@ -1,6 +1,6 @@
 <template>
-  <v-layout class="rounded rounded-md">
-    <v-app-bar class="bg-light-blue-darken-1" title="">
+  <v-app>
+    <v-app-bar app fixed color="light-blue-darken-1">
       <v-container>
         <v-img class="logo" src="@/assets/Pokémon_logo.png" alt="Logo" height="50"></v-img>
       </v-container>
@@ -10,37 +10,30 @@
     </v-app-bar>
     <v-main>
       <v-container>
-
         <FavoritePokemon v-if="viewFavorites" :favorites="favorites" @remove-favorite="removeFavorite" />
         <template v-else>
           <PokemonList v-if="!selectedPokemon" @select-pokemon="viewPokemonDetails" />
-          <!-- <PokemonDetail
-            v-else
-            :pokemon="selectedPokemon"
-            :isFavorite="isFavorite(selectedPokemon)"
-            @back="selectedPokemon = null"
-            @toggle-favorite="toggleFavorite"
-          /> -->
         </template>
       </v-container>
     </v-main>
-  </v-layout>
+    <AppFooter />
+  </v-app>
 </template>
-
-
 
 <script>
 import PokemonList from './components/PokemonList.vue';
-// import PokemonDetail from './components/PokemonDetail.vue';
+import PokemonDetail from './components/PokemonDetail.vue';
 import FavoritePokemon from './components/FavoritePokemon.vue';
+import AppFooter from './components/AppFooter.vue';
 import { usePokemonStore } from './store/pokemonStore';
 import { ref, computed, onMounted } from 'vue';
 
 export default {
   components: {
     PokemonList,
-    // PokemonDetail,
-    FavoritePokemon
+    PokemonDetail,
+    FavoritePokemon,
+    AppFooter,
   },
   setup() {
     const store = usePokemonStore();
@@ -63,16 +56,14 @@ export default {
     // Method to view Pokémon details
     const viewPokemonDetails = (pokemon) => {
       selectedPokemon.value = pokemon;
-      // Optionally load more details using store actions
-      // store.fetchPokemonDetails(pokemon.id);
     };
 
     // Method to remove a favorite Pokémon
     const removeFavorite = (pokemon) => {
-      store.toggleFavorite(pokemon); // Assuming store handles favorite toggling
+      store.toggleFavorite(pokemon); // 
     };
 
-    // Return reactive variables and methods to template
+
     return {
       viewFavorites,
       favorites,
@@ -84,8 +75,9 @@ export default {
   },
 };
 </script>
-
-
-
-
-
+<style>
+.v-main {
+  padding-top: 64px;
+  padding-bottom: 64px; 
+}
+</style>
