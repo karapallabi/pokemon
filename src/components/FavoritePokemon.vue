@@ -7,8 +7,8 @@
       <v-col v-for="pokemon in favorites" :key="pokemon.id" cols="12" sm="6" md="4">
         <v-card class="border-yellow-lighten-2 bg-brown-lighten-5">
           <v-img class="mt-3" :src="pokemon.image" aspect-ratio="1"></v-img>
-          <v-card-title>{{ pokemon.name }}</v-card-title>
-          <v-card-subtitle>ID: {{ pokemon.id }}</v-card-subtitle>
+          <v-card-title class="text-capitalize text-center">{{ pokemon.name }}</v-card-title>
+          <p class="text-center">ID: {{ pokemon.id }}</p>
           <v-card-text>
             <v-chip class="ma-2 bg-blue-darken-2 "  label>
               <v-icon class=""icon="mdi-label" start></v-icon>
@@ -31,15 +31,11 @@
             <v-chip class="bg-light-green-darken-1" v-for="(stat, index) in pokemon.stats" :key="index"  >
               {{ stat }}
             </v-chip>
-            </v-card-text>
-          
-           
-          <v-btn class="mb-4 ml-5 bg-blue-lighten-5" @click="toggleFavorite(pokemon)">Remove from Favorites</v-btn>
-
+            </v-card-text>  
+           <v-btn class="mb-4 ml-5 bg-blue-lighten-5" @click="toggleFavorite(pokemon)">Remove from Favorites</v-btn>
         </v-card>
       </v-col>
     </v-row>
-
     <v-row v-else>
       <v-col cols="12">
         <p>No favorite Pokémon added yet.</p>
@@ -47,7 +43,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import { usePokemonStore } from '../store/pokemonStore';
 import { computed } from 'vue';

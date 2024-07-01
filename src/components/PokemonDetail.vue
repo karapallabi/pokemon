@@ -30,7 +30,7 @@
         </v-chip>
       </v-card-text>
       <v-card-actions class="justify-end">
-        <v-btn class="bg-blue-lighten-5" text @click="isDetailActive.value = false">Close</v-btn>
+        <v-btn class="bg-blue-lighten-5" text @click="handleClose">Close</v-btn>
         <v-btn class="bg-blue-lighten-5" @click="toggleFavorite">
           {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
         </v-btn>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, ref, toRefs, watch } from 'vue';
 import { usePokemonStore } from '../store/pokemonStore';
 
 export default {
@@ -50,23 +50,38 @@ export default {
   },
   emits: ['update:dialog'],
   setup(props, { emit }) {
+    const { pokemon, dialog } = toRefs(props);
     const store = usePokemonStore();
-    const isFavorite = computed(() => store.isFavorite(props.pokemon.id));
-    const isDetailActive = false;
+    const isFavorite = computed(() => store.isFavorite(pokemon.value.id));
+    const isDetailActive = ref(false);
 
     const toggleFavorite = () => {
-      store.toggleFavorite(props.pokemon);
+      store.toggleFavorite(pokemon.value);
     };
 
     const closeDialog = (value) => {
       emit('update:dialog', value);
     };
 
+    const handleClose = () => {
+      isDetailActive.value = false;
+      closeDialog(false);
+    };
+
+    watch(dialog, (newValue) => {
+      if (!newValue) {
+        isDetailActive.value = false;
+      }
+    });
+
     return {
+      pokemon,
+      dialog,
       isFavorite,
       toggleFavorite,
       closeDialog,
-      isDetailActive
+      isDetailActive,
+      handleClose,
     };
   },
 };

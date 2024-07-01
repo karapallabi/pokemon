@@ -9,7 +9,6 @@
         <v-select v-model="typeFilter" :items="allTypes" label="Filter by Type" class="mb-4"></v-select>
       </v-col>
     </v-row>
-
     <!-- Loading Spinner -->
     <div v-if="store.pokemonLoading" class="text-center">
       <p v-if="store.pokemonError">Something went wrong... please contact @Kiddy</p>
@@ -17,7 +16,6 @@
       <v-progress-circular v-if="store.pokemonLoading" :size="70" :width="7" color="blue"
         indeterminate></v-progress-circular>
     </div>
-
     <!-- Pokémon Cards -->
     <div v-if="store.pokemonResult && store.pokemonResult.pokemon_v2_pokemon" class="midle w-full flex flex-wrap">
       <div v-for="pokemon in paginatedPokemon" :key="pokemon.id"
@@ -28,7 +26,6 @@
           <v-icon @click.stop="toggleFavorite(pokemon)" class="favorite-icon" color="red" size="large">
             {{ isFavorite(pokemon.id) ? 'mdi-heart' : 'mdi-heart-outline' }}
           </v-icon>
-
           <v-snackbar v-model="snackbar" :timeout="timeout">
             {{ snackbarMessage }}
             <template v-slot:actions>
@@ -69,7 +66,6 @@
 import { ref, computed, onMounted } from 'vue';
 import { usePokemonStore } from '../store/pokemonStore';
 import PokemonDetail from '../components/PokemonDetail.vue';
-import { getPokemonDetail } from '../service/pokemonService';
 
 const store = usePokemonStore();
 const dialog = ref(false);
@@ -133,7 +129,7 @@ const toggleFavorite = (pokemon) => {
 </script>
 
 <style scoped>
-/* Add your scoped styles here */
+
 .pokemon-card {
   max-width: 500px;
   margin: auto;
