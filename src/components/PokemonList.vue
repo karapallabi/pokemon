@@ -9,14 +9,12 @@
         <v-select v-model="typeFilter" :items="allTypes" label="Filter by Type" class="mb-4"></v-select>
       </v-col>
     </v-row>
-
     <!-- Pokémon Cards -->
     <div class="midle w-full flex flex-wrap">
       <div v-for="pokemon in paginatedPokemon" :key="pokemon.id" class="card w-full sm:w-1/3 md:w-1/4 my-4 flex cursor-pointer flex-col justify-center items-center relative">
         <!-- Favorite Icon -->
-         
         <div class="poketop shadow-xl border-white h-28 bg-light-blue-lighten-1 w-56 rounded-t-full border-8">
-          <v-icon  @click.stop="toggleFavorite(pokemon)" class="favorite-icon" color="red" size="large">
+          <v-icon @click.stop="toggleFavorite(pokemon)" class="favorite-icon" color="red" size="large">
             {{ isFavorite(pokemon.id) ? 'mdi-heart' : 'mdi-heart-outline' }}
           </v-icon>
         </div>
@@ -32,7 +30,6 @@
         </div>
       </div>
     </div>
-
     <!-- Pagination Controls -->
     <v-row justify="center">
       <v-col cols="12" sm="6">
@@ -40,45 +37,28 @@
       </v-col>
     </v-row>
 
-    <!-- Dialog for Detailed Pokémon View -->
-    <v-dialog v-model="dialog" transition="dialog-top-transition" width="auto">
-      <v-card>
-        <h1>{{ selectedPokemon ? selectedPokemon.name : '' }}</h1>
-        <v-img :src="selectedPokemon ? selectedPokemon.image : ''" aspect-ratio="1"></v-img>
-        <v-card-subtitle>ID: {{ selectedPokemon ? selectedPokemon.id : '' }}</v-card-subtitle>
-        <v-card-text v-if="selectedPokemon">
-          <p>Type: {{ selectedPokemon.types.join(', ') }}</p>
-          <p>Height: {{ selectedPokemon.height }} decimetres</p>
-          <p>Weight: {{ selectedPokemon.weight }} hectograms</p>
-          <p>stat: {{ selectedPokemon.stats.join(',') }}</p>
-        </v-card-text>
-        <p>Abilities: {{ selectedPokemon.abilities.join(', ') }}</p>
-        <v-card-actions class="justify-end">
-          <v-btn text @click="dialog = false">Close</v-btn>
-          <v-btn @click="toggleFavorite(selectedPokemon)">
-            {{ isFavorite(selectedPokemon ? selectedPokemon.id : '') ? 'Remove from Favorites' : 'Add to Favorites' }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <!-- Pokémon Detail Dialog -->
+    <pokemon-detail :selectedPokemon="selectedPokemon" :dialog="dialog"></pokemon-detail>
   </v-container>
 </template>
+
 <script>
 import { usePokemonStore } from '../store/pokemonStore';
-import { ref, computed, onMounted } from 'vue';
+import { computed, ref } from 'vue';
+import PokemonDetail from './PokemonDetail.vue';
 
 export default {
+  name: 'PokemonList',
+  components: {
+    PokemonDetail,
+  },
   setup() {
     const store = usePokemonStore();
-    const dialog = ref(false);
-    const selectedPokemon = ref(null);
-
+    
     // Fetch Pokémon list on component mount
-    onMounted(() => {
-      store.fetchPokemon();
-    });
+    store.fetchPokemon();
 
-    // Computed properties to bind to store getters and setters
+    // Computed properties
     const search = computed({
       get() {
         return store.search;
@@ -102,16 +82,15 @@ export default {
 
     const filteredPokemon = computed(() => store.filteredPokemon);
     const allTypes = computed(() => store.allTypes);
-    const favoritePokemon = computed(() => store.favoritePokemon);
     const isFavorite = (pokemonId) => store.isFavorite(pokemonId);
-
     const paginatedPokemon = computed(() => {
       const start = (currentPage.value - 1) * pageSize;
       const end = start + pageSize;
       return filteredPokemon.value.slice(start, end);
     });
-
     const totalPages = computed(() => Math.ceil(filteredPokemon.value.length / pageSize));
+    const dialog = ref(false);
+    const selectedPokemon = ref(null);
 
     // Method to select a Pokémon and open dialog
     const selectPokemon = (pokemon) => {
@@ -129,21 +108,20 @@ export default {
       typeFilter,
       filteredPokemon,
       allTypes,
-      favoritePokemon,
       isFavorite,
+      paginatedPokemon,
+      currentPage,
+      totalPages,
       dialog,
       selectedPokemon,
       selectPokemon,
       toggleFavorite,
-      paginatedPokemon,
-      currentPage,
-      totalPages,
     };
   },
 };
 </script>
+
 <style scoped>
-/* Add your scoped styles here */
 .pokemon-card {
   max-width: 500px;
   margin: auto;
@@ -193,14 +171,10 @@ export default {
   list-style-type: none;
   padding: 0;
 }
-
 .pokemon-stats li {
   font-size: 14px;
   color: #666;
 }
-
-
-
 .v-btn:first-child {
   background-color: #e0e0e0;
 }

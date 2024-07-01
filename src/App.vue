@@ -10,10 +10,18 @@
     </v-app-bar>
     <v-main>
       <v-container>
-        <FavoritePokemon v-if="viewFavorites" :favorites="favorites" @remove-favorite="removeFavorite" />
+        <!-- <FavoritePokemon v-if="viewFavorites" :favorites="favorites" @remove-favorite="removeFavorite" />
         <template v-else>
           <PokemonList v-if="!selectedPokemon" @select-pokemon="viewPokemonDetails" />
-        </template>
+        </template> -->
+
+          <!-- Render PokemonList or FavoritePokemon based on viewFavorites -->
+          <PokemonList v-if="!viewFavorites" @select-pokemon="viewPokemonDetails" />
+        <FavoritePokemon v-else />
+        
+        <!-- Render PokemonDetail when selectedPokemon is not null -->
+        <PokemonDetail v-if="selectedPokemon" :pokemon="selectedPokemon" @update:pokemon="updateFavoritePokemon" />
+        
       </v-container>
     </v-main>
     <AppFooter />
@@ -26,7 +34,7 @@ import PokemonDetail from './components/PokemonDetail.vue';
 import FavoritePokemon from './components/FavoritePokemon.vue';
 import AppFooter from './components/AppFooter.vue';
 import { usePokemonStore } from './store/pokemonStore';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 
 export default {
   components: {
@@ -40,14 +48,6 @@ export default {
     const selectedPokemon = ref(null);
     const viewFavorites = ref(false);
 
-    // Fetch Pokémon list on component mount
-    onMounted(() => {
-      store.fetchPokemon();
-    });
-
-    // Computed properties to bind to store getters and setters
-    const favorites = computed(() => store.favoritePokemon);
-
     // Method to toggle view of favorites
     const toggleViewFavorites = () => {
       viewFavorites.value = !viewFavorites.value;
@@ -58,23 +58,22 @@ export default {
       selectedPokemon.value = pokemon;
     };
 
-    // Method to remove a favorite Pokémon
-    const removeFavorite = (pokemon) => {
-      store.toggleFavorite(pokemon); // 
+    // Method to update favorite Pokémon status
+    const updateFavoritePokemon = (pokemon) => {
+      store.toggleFavorite(pokemon); // Toggle favorite status in store
     };
-
 
     return {
       viewFavorites,
-      favorites,
       selectedPokemon,
       toggleViewFavorites,
       viewPokemonDetails,
-      removeFavorite,
+      updateFavoritePokemon,
     };
   },
 };
 </script>
+
 <style>
 .v-main {
   padding-top: 64px;
