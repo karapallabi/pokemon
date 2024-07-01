@@ -1,4 +1,4 @@
-<template>
+<template v-slot:default="{ isDetailActive }">
   <v-dialog :model-value="dialog" @update:model-value="closeDialog" transition="dialog-top-transition" width="auto">
     <v-card v-if="pokemon" class="border-yellow-lighten-2 bg-brown-lighten-5">
       <v-img class="mt-3" :src="pokemon.image" aspect-ratio="1"></v-img>
@@ -30,7 +30,7 @@
         </v-chip>
       </v-card-text>
       <v-card-actions class="justify-end">
-        <v-btn class="bg-blue-lighten-5" text @click="closeDialog">Close</v-btn>
+        <v-btn class="bg-blue-lighten-5" text @click="isDetailActive.value = false">Close</v-btn>
         <v-btn class="bg-blue-lighten-5" @click="toggleFavorite">
           {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
         </v-btn>
@@ -52,6 +52,7 @@ export default {
   setup(props, { emit }) {
     const store = usePokemonStore();
     const isFavorite = computed(() => store.isFavorite(props.pokemon.id));
+    const isDetailActive = false;
 
     const toggleFavorite = () => {
       store.toggleFavorite(props.pokemon);
@@ -65,6 +66,7 @@ export default {
       isFavorite,
       toggleFavorite,
       closeDialog,
+      isDetailActive
     };
   },
 };
