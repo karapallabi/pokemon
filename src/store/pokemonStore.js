@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { fetchPokemonData, fetchPokemons, getPokemonDetail } from '../service/pokemonService';
+import { watch } from 'vue'
 
 export const usePokemonStore = defineStore('pokemon', {
     state: () => ({
@@ -8,6 +9,10 @@ export const usePokemonStore = defineStore('pokemon', {
         favorites: [],
         search: '',
         typeFilter: '',
+        //
+        pokemonResult: '',
+        pokemonLoading: '',
+        pokemonError: ''
     }),
     //
     //
@@ -22,7 +27,7 @@ export const usePokemonStore = defineStore('pokemon', {
             return Array.from(types);
         },
         filteredPokemon(state) {
-            let filtered = state.pokemonList;
+            let filtered = getPokemonDetail(state.pokemonResult.pokemon_v2_pokemon);
 
             if (state.search.trim() !== '') {
                 const query = state.search.trim().toLowerCase();
@@ -46,10 +51,13 @@ export const usePokemonStore = defineStore('pokemon', {
     //
     actions: {
         async fetchPokemon() {
-            const data = await fetchPokemonData();
-            // const { result, loading, error } = await fetchPokemons();
-            // console.log(result);
-            this.pokemonList = getPokemonDetail(data.data.pokemon_v2_pokemon);
+            const { result, loading, error } = await fetchPokemons();
+            this.pokemonResult = result;
+            this.pokemonLoading = loading;
+            this.pokemonError = error;
+            watch(result, value => {
+                this.pokemonList = getPokemonDetail(value.pokemon_v2_pokemon);
+            })
         },
         toggleFavorite(pokemon) {
             const index = this.favorites.indexOf(pokemon.id);

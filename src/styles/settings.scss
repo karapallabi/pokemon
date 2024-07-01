@@ -1,26 +1,18 @@
-.logo{
-    width:15%;
-    
-}
-.v-app-bar.v-toolbar{
-    background: #039BE5;
-    height: 81px;
-}
+// Variables
+$primary-color: #039be5;
+$toolbar-height: 81px;
+$logo-width: 15%;
+$responsive-padding: 30%;
 
-.v-responsive__sizer{
-    padding-bottom:30% !important;
+// Logo
+.logo {
+  width: $logo-width;
 }
-// .pokecard{
-//     overflow-y:clip;
-//     width:120%;
-// }
-// .bg-clr{
-//     background: #B3E5FC;
-// }
-// .bg-fav{
-//     background:#f0f0f0;
-//     border:2px solid #FFC107;
-// }
-// .mr-20{
-//     margin-right:90px !important;
-// }
+// Toolbar
+.v-app-bar.v-toolbar {
+  background: $primary-color;
+  height: $toolbar-height;
+}
+.v-responsive__sizer {
+  padding-bottom: $responsive-padding !important;
+}

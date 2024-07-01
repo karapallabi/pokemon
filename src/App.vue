@@ -10,18 +10,10 @@
     </v-app-bar>
     <v-main>
       <v-container>
-        <!-- <FavoritePokemon v-if="viewFavorites" :favorites="favorites" @remove-favorite="removeFavorite" />
-        <template v-else>
-          <PokemonList v-if="!selectedPokemon" @select-pokemon="viewPokemonDetails" />
-        </template> -->
-
-          <!-- Render PokemonList or FavoritePokemon based on viewFavorites -->
-          <PokemonList v-if="!viewFavorites" @select-pokemon="viewPokemonDetails" />
-        <FavoritePokemon v-else />
-        
+        <PokemonList v-if="!viewFavorites" @select-pokemon="viewPokemonDetails" />
+           <FavoritePokemon v-else />
         <!-- Render PokemonDetail when selectedPokemon is not null -->
-        <PokemonDetail v-if="selectedPokemon" :pokemon="selectedPokemon" @update:pokemon="updateFavoritePokemon" />
-        
+        <PokemonDetail v-if="selectedPokemon" :pokemon="selectedPokemon" @update:pokemon="updateFavoritePokemon" />       
       </v-container>
     </v-main>
     <AppFooter />
@@ -35,7 +27,6 @@ import FavoritePokemon from './components/FavoritePokemon.vue';
 import AppFooter from './components/AppFooter.vue';
 import { usePokemonStore } from './store/pokemonStore';
 import { ref, computed } from 'vue';
-
 export default {
   components: {
     PokemonList,
@@ -47,22 +38,18 @@ export default {
     const store = usePokemonStore();
     const selectedPokemon = ref(null);
     const viewFavorites = ref(false);
-
     // Method to toggle view of favorites
     const toggleViewFavorites = () => {
       viewFavorites.value = !viewFavorites.value;
     };
-
     // Method to view Pokémon details
     const viewPokemonDetails = (pokemon) => {
       selectedPokemon.value = pokemon;
     };
-
     // Method to update favorite Pokémon status
     const updateFavoritePokemon = (pokemon) => {
       store.toggleFavorite(pokemon); // Toggle favorite status in store
     };
-
     return {
       viewFavorites,
       selectedPokemon,
@@ -73,7 +60,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .v-main {
   padding-top: 64px;

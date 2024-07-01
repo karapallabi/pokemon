@@ -81,12 +81,12 @@ export async function fetchPokemonData() {
 
 export async function fetchPokemons() {
     const { result, loading, error } = useQuery(POKEMON_QUERY);
-
-    return result;
+    return {
+        result,
+        loading,
+        error
+    }
 }
-
-
-
 
 function flattenNamesObject(arrayName, tagName) {
     return arrayName.reduce((finalList, currentObject) => {
@@ -115,53 +115,8 @@ export function getPokemonDetail(pokemonList) {
                     || pokemon_v2_pokemonsprites[0].altImage2
                     || pokemon_v2_pokemonsprites[0].altImage4
                     || pokemon_v2_pokemonsprites[0].altImage6
-                    || "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/2.svg"
+                    || "@/assets/ImagePlaceholder.png"
             }
         }
     );
 }
-
-
-// function getPokemons(pokemonList) {
-//     return pokemonList.data.pokemon_v2_pokemon.map(
-//         ({ id, name, pokemon_v2_pokemonsprites }) =>
-//             ({
-//                 id,
-//                 name,
-//                 image : pokemon_v2_pokemonsprites[0].image
-//                     || pokemon_v2_pokemonsprites[0].altImage2
-//                     || pokemon_v2_pokemonsprites[0].altImage4
-//                     || pokemon_v2_pokemonsprites[0].altImage6
-//                     || "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/2.svg"
-//                     // default 2.svg for 29 pokemons as images are unavailable
-//             })
-//     )
-// }
-
-// function getPokemonDetail(pokemonList, id) {
-//     return pokemonList.data.pokemon_v2_pokemon.filter(
-//         i => i.id === id
-//     ).map(
-//         ({
-//             id,
-//             name,
-//             pokemon_v2_pokemontypes,
-//             pokemon_v2_pokemonabilities,
-//             pokemon_v2_pokemonstats,
-//             pokemon_v2_pokemonsprites
-//         }) => {
-//             return {
-//                 id: id,
-//                 name: name,
-//                 types: flattenNamesObject(pokemon_v2_pokemontypes, 'pokemon_v2_type'),
-//                 abilities: flattenNamesObject(pokemon_v2_pokemonabilities, 'pokemon_v2_ability'),
-//                 stats: flattenNamesObject(pokemon_v2_pokemonstats, 'pokemon_v2_stat'),
-//                 image: pokemon_v2_pokemonsprites[0].image
-//                     || pokemon_v2_pokemonsprites[0].altImage2
-//                     || pokemon_v2_pokemonsprites[0].altImage4
-//                     || pokemon_v2_pokemonsprites[0].altImage6
-//                     || "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/2.svg"
-//             }
-//         }
-//     )
-// }
