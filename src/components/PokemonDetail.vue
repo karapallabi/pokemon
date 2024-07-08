@@ -39,50 +39,38 @@
   </v-dialog>
 </template>
 
-<script>
-import { computed, ref, toRefs, watch } from 'vue';
+<script setup>
+import { computed, ref, watch, toRefs } from 'vue';
 import { usePokemonStore } from '../store/pokemonStore';
 
-export default {
-  props: {
-    pokemon: Object,
-    dialog: Boolean,
-  },
-  emits: ['update:dialog'],
-  setup(props, { emit }) {
-    const { pokemon, dialog } = toRefs(props);
-    const store = usePokemonStore();
-    const isFavorite = computed(() => store.isFavorite(pokemon.value.id));
-    const isDetailActive = ref(false);
+const props = defineProps({
+  pokemon: Object,
+  dialog: Boolean,
+});
 
-    const toggleFavorite = () => {
-      store.toggleFavorite(pokemon.value);
-    };
+const emit = defineEmits(['update:dialog']);
 
-    const closeDialog = (value) => {
-      emit('update:dialog', value);
-    };
+const { pokemon, dialog } = toRefs(props);
+const store = usePokemonStore();
+const isFavorite = computed(() => store.isFavorite(pokemon.value.id));
+const isDetailActive = ref(false);
 
-    const handleClose = () => {
-      isDetailActive.value = false;
-      closeDialog(false);
-    };
-
-    watch(dialog, (newValue) => {
-      if (!newValue) {
-        isDetailActive.value = false;
-      }
-    });
-
-    return {
-      pokemon,
-      dialog,
-      isFavorite,
-      toggleFavorite,
-      closeDialog,
-      isDetailActive,
-      handleClose,
-    };
-  },
+const toggleFavorite = () => {
+  store.toggleFavorite(pokemon.value);
 };
+
+const closeDialog = (value) => {
+  emit('update:dialog', value);
+};
+
+const handleClose = () => {
+  isDetailActive.value = false;
+  closeDialog(false);
+};
+
+watch(dialog, (newValue) => {
+  if (!newValue) {
+    isDetailActive.value = false;
+  }
+});
 </script>

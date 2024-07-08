@@ -1,15 +1,16 @@
 <template>
   <v-footer color="grey-lighten-2" app>
     <v-col class="text-center white--text">
-      © {{ new Date().getFullYear() }} Pokémon
+      © {{ currentYear }} Pokémon
     </v-col>
   </v-footer>
 </template>
 
-<script>
-export default {
-  name: 'AppFooter',
-};
+<script setup>
+import { ref } from 'vue';
+
+// Define the current year using Composition API
+const currentYear = ref(new Date().getFullYear());
 </script>
 
 <style scoped>
