@@ -15,17 +15,10 @@ const apolloClient = new ApolloClient({
     uri: 'https://beta.pokeapi.co/graphql/v1beta',
 })
 
-const app = createApp({
-    setup() {
-        provide(DefaultApolloClient, apolloClient)
-    },
-
-    render: () => h(App),
-})
-
-
+const app = createApp(App);
 const pinia = createPinia();
 
+app.provide(DefaultApolloClient, apolloClient);
 app.use(pinia);
 app.use(vuetify);
 app.mount('#app');
