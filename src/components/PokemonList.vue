@@ -67,6 +67,8 @@ import { ref, computed, onMounted } from 'vue';
 import { usePokemonStore } from '../store/pokemonStore';
 import PokemonDetail from '../components/PokemonDetail.vue';
 
+
+
 const store = usePokemonStore();
 const dialog = ref(false);
 const selectedPokemon = ref(null);
